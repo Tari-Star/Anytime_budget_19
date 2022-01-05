@@ -6,14 +6,14 @@ const request = indexedDB.open("anytime_budget_19", 1);
 // this event will emit if the database version changes ( nonexistant to version 1, v1 to v2, etc. )
 request.onupgradeneeded = function (event) {
   const db = event.target.result;
-  db.createObjectStore("new_deposit", { autoIncrement: true });
+  db.createObjectStore("new_transaction", { autoIncrement: true });
 };
 
 // upon a successful
 request.onsuccess = function (event) {
   db = event.target.result;
   if (navigator.online) {
-    uploadDeposit();
+    uploadTransaction();
   }
 };
 request.onerror = function (event) {
@@ -23,19 +23,19 @@ request.onerror = function (event) {
 
   // This function will be executed if there's attempt to submit a new transaction without internet connection
 function saveRecord(record) {
-    const transaction = db.transaction(["new_deposit"], "readwrite");
-    const depositObjectStore = transaction.objectStore("new_deposit");
-    depositObjectStore.add(record);
+    const action = db.action(["new_transaction"], "readwrite");
+    const transactionObjectStore = action.objectStore("new_transaction");
+    transactionObjectStore.add(record);
   }
   
-  function uploadDeposit() {
-    const transaction = db.transaction(["new_deposit", "readwrite"]);
-    const depositObjectStore = transaction.objectStore("new_deposit");
-    const getAll = depositObjectStore.getAll();
+  function uploadTransaction() {
+    const action = db.action(["new_transaction", "readwrite"]);
+    const transactionObjectStore = action.objectStore("new_transaction");
+    const getAll = transactionObjectStore.getAll();
     getAll.onsuccess = function () {
          // if there was data in indexedDb's store, send it to the api server
         if (getAll.result.length > 0) {
-            fetch("/api/deposit", {
+            fetch("/api/transaction", {
               method: "POST",
               body: JSON.stringify(getAll.result),
               headers: {
@@ -49,11 +49,11 @@ function saveRecord(record) {
         throw new Error(serverResponse);
       }
       // open one more transaction
-      const transaction = db.transaction(["new_deposit"], "readwrite");
+      const action = db.action(["new_transaction"], "readwrite");
       // access the new_pizza object store
-      const depositObjectStore = transaction.objectStore("new_deposit");
+      const transactionObjectStore = action.objectStore("new_transaction");
       // clear all items in your store
-      depositObjectStore.clear();
+      transactionObjectStore.clear();
 
       alert("All saved transactions has been submitted!");
     })
@@ -65,4 +65,4 @@ function saveRecord(record) {
 };
 
 // listen for app coming back online
-window.addEventListener('online', uploadDeposit);
+window.addEventListener('online', uploadTransaction);
