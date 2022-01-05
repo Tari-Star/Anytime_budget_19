@@ -17,52 +17,52 @@ request.onsuccess = function (event) {
   }
 };
 request.onerror = function (event) {
-    // log error here
-    console.log(event.target.errorCode);
-  };
+  // log error here
+  console.log(event.target.errorCode);
+};
 
-  // This function will be executed if there's attempt to submit a new transaction without internet connection
+// This function will be executed if there's attempt to submit a new transaction without internet connection
 function saveRecord(record) {
-    const action = db.action(["new_transaction"], "readwrite");
-    const transactionObjectStore = action.objectStore("new_transaction");
-    transactionObjectStore.add(record);
-  }
-  
-  function uploadTransaction() {
-    const action = db.action(["new_transaction", "readwrite"]);
-    const transactionObjectStore = action.objectStore("new_transaction");
-    const getAll = transactionObjectStore.getAll();
-    getAll.onsuccess = function () {
-         // if there was data in indexedDb's store, send it to the api server
-        if (getAll.result.length > 0) {
-            fetch("/api/transaction", {
-              method: "POST",
-              body: JSON.stringify(getAll.result),
-              headers: {
-                Accept: "application/json, text/plain, */*",
-                "Content-Type": "application/json",
-              },  
-    })
-    .then((response) => response.json())
-    .then((serverResponse) => {
-      if (serverResponse.message) {
-        throw new Error(serverResponse);
-      }
-      // open one more transaction
-      const action = db.action(["new_transaction"], "readwrite");
-      // access the new_pizza object store
-      const transactionObjectStore = action.objectStore("new_transaction");
-      // clear all items in your store
-      transactionObjectStore.clear();
-
-      alert("All saved transactions has been submitted!");
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  const action = db.action(["new_transaction"], "readwrite");
+  const transactionObjectStore = action.objectStore("new_transaction");
+  transactionObjectStore.add(record);
 }
-};
-};
+function uploadTransaction() {
+  const action = db.action(["new_transaction", "readwrite"]);
+  const transactionObjectStore = action.objectStore("new_transaction");
+  const getAll = transactionObjectStore.getAll();
+  
+  getAll.onsuccess = function () {
+    // if there was data in indexedDb's store, send it to the api server
+    if (getAll.result.length > 0) {
+      fetch("/api/transaction", {
+        method: "POST",
+        body: JSON.stringify(getAll.result),
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((serverResponse) => {
+          if (serverResponse.message) {
+            throw new Error(serverResponse);
+          }
+          // open one more transaction
+          const action = db.action(["new_transaction"], "readwrite");
+          // access the new_pizza object store
+          const transactionObjectStore = action.objectStore("new_transaction");
+          // clear all items in your store
+          transactionObjectStore.clear();
+
+          alert("All saved transactions has been submitted!");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+}
 
 // listen for app coming back online
-window.addEventListener('online', uploadTransaction);
+window.addEventListener("online", uploadTransaction);
