@@ -6,9 +6,9 @@
 
 ## Description:
 
- PWA (Progressive Web Application) Budget tracker application with offline access and functionality.
- The user able to add expenses and deposits to their budget with or without a connection.
- If the user enters transactions offline, the total should be updated when they're brought back online.
+Budget Tracker is a progressive web application that allows users to track their budgets by adding expenses and deposits to their budget through the "Add/Subtract Funds" buttons.
+The user able to add expenses and deposits to their budget with or without a connection.
+If the user enters transactions offline, the total should be updated when they're brought back online.
 
 ##  Table of Contents
 
