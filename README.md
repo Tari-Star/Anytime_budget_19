@@ -19,7 +19,7 @@ If the user enters transactions offline, the total should be updated when they'r
 * [Questions](#questions)
 
 
-## Demo:
+
 
 ***GITHUB***
 
@@ -29,6 +29,9 @@ If the user enters transactions offline, the total should be updated when they'r
 
 * Heroku app: [https://anytime-budget-19.herokuapp.com/](https://anytime-budget-19.herokuapp.com/)
 
+## Demo:
+
+![demo](./images/budget.png)
 
  ## Technology:
  > Links ( click on titles )
