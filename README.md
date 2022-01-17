@@ -23,7 +23,7 @@ If the user enters transactions offline, the total should be updated when they'r
 
 ***GITHUB***
 
-* Repository link: [https://github.com/Tari-Star/Anytime_budget_19](https://github.com/Tari-Star/Anytime_budget_19.git)
+* Repository link: [https://github.com/Tari-Star/Anytime_budget_19.git](https://github.com/Tari-Star/Anytime_budget_19.git)
 
 ***HEROKU***
 
